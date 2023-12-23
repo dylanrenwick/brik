@@ -72,7 +72,7 @@ class Brik(Debug):
         parser = Parser(tokens, self.debug)
         return parser.parse()
     def transpile(self, module: Module)-> AsmModule:
-        transpiler = Transpiler(self.debug)
+        transpiler = Transpiler(self.platform, self.debug)
         return transpiler.transpile(module)
 
     def generate_asm(self, mod: AsmModule)-> str:
