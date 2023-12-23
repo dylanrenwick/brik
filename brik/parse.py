@@ -195,6 +195,6 @@ class Parser(Debug):
         asm: str = contents.value
         asm_lines = asm.split('\n')
         asm_lines = [line.strip() for line in asm_lines]
-        asm = '\n'.join(asm_lines)
+        asm = '\n'.join([line for line in asm_lines if len(line) > 0])
 
         return AsmMacroNode(asm)
