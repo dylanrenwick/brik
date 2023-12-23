@@ -60,7 +60,7 @@ class Brik(Debug):
         p.clear()
         p.print(asm_mod)
         self.v_print(str(p))
-        asm_file_path = self.generate_asm(module)
+        asm_file_path = self.generate_asm(asm_mod)
         obj_file_path = self.assemble(asm_file_path)
         out_file_path = self.link(obj_file_path)
         return (tokens, module, asm_mod, asm_file_path, obj_file_path, out_file_path)
@@ -75,7 +75,7 @@ class Brik(Debug):
         transpiler = Transpiler(self.debug)
         return transpiler.transpile(module)
 
-    def generate_asm(self, mod: Module)-> str:
+    def generate_asm(self, mod: AsmModule)-> str:
         generator = AsmGenerator(self.platform, self.debug)
         asm = generator.generate_module(mod)
         path = f'{self.asm_path()}/{self.name}.asm'
