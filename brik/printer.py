@@ -1,11 +1,13 @@
 class Printer:
     def __init__(self, indent_style='\t'):
-        self.content = ''
-        self.indent = 0
+        self.clear()
         self.indent_style = indent_style
 
     def get_indent(self)-> int:
         return self.indent_style * self.indent
+    def clear(self):
+        self.content = ''
+        self.indent = 0
 
     def right(self):
         self.indent += 1
