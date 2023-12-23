@@ -85,7 +85,7 @@ class Brik(Debug):
         return path
     def assemble(self, asm_file_path: str)-> str:
         path = f'{self.obj_path()}/{self.name}.o'
-        os.system(f'nasm -f {self.platform.get_assembler_format()} -o {path} {asm_file_path}')
+        os.system(f'nasm -f {self.platform.assembler_format()} -o {path} {asm_file_path}')
         return path
     def link(self, obj_file_path: str)-> str:
         path = f'{self.out_path()}/{self.name}.exe'
