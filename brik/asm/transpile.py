@@ -11,7 +11,7 @@ class StackFrame:
     def __init__(self, parent: Self | None = None):
         self.parent = parent
         self.contents = {}
-        self.offset = 0
+        self.offset = 2
     def __getitem__(self, name: str)-> int:
         if name in self.contents:
             return self.contents[name]
