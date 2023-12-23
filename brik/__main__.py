@@ -23,7 +23,7 @@ def main():
         print('No filename provided')
         exit()
     else:
-        proj_name = args.file.split('\\')[-1].split('.')[0]
+        proj_name = args.file.split('\\')[-1].split('/')[-1].split('.')[0]
         with open(args.file, 'r') as f:
             source = f.read()
             source = source.replace('\r\n', '\n')
