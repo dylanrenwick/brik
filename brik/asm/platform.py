@@ -40,8 +40,9 @@ class Platform(ABC):
     def make_syscall(self, printer: Printer, syscall: Syscall, *data):
         pass
 
-    def make_exit(self, printer: Printer, exit_code: int):
-        self.make_syscall(printer, Syscall.EXIT, exit_code)
+    def make_exit(self, printer: Printer, exit_code: int | str):
+        if isinstance(exit_code, int): self.make_syscall(printer, Syscall.EXIT, f'{exit_code}d')
+        else: self.make_syscall(printer, Syscall.EXIT, exit_code)
 
     _registers = ['ax','bx','cx','dx','sp','bp','si','di']
     def __getattribute__(self, name: str):
