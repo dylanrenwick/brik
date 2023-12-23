@@ -3,7 +3,7 @@ class Printer:
         self.clear()
         self.indent_style = indent_style
 
-    def get_indent(self)-> int:
+    def get_indent(self)-> str:
         return self.indent_style * self.indent
     def clear(self):
         self.content = ''
