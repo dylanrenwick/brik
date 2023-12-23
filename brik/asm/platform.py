@@ -46,7 +46,7 @@ class Platform(ABC):
 
     _registers = ['ax','bx','cx','dx','sp','bp','si','di']
     def __getattribute__(self, name: str):
-        if name != 'get_register':
+        if len(name) == 2 and name in Platform._registers:
             val = self.get_register(name)
             if val: return val
         return super().__getattribute__(name)
