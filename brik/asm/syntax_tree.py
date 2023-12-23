@@ -28,12 +28,20 @@ class AsmNode(ABC):
     @abstractmethod
     def data_type(self)-> DataType:
         return DataType.UNKNOWN
+    @abstractmethod
+    def __pretty_print__(self, printer: Printer):
+        pass
 
 class AsmLiteral(AsmNode):
     def __init__(self, value: str):
         self.value = value
     def data_type(self)-> DataType:
         return super().data_type()
+    def __pretty_print__(self, printer: Printer):
+        printer.append_ln('#asm:')
+        printer.right()
+        printer.append_ln(self.value)
+        printer.left()
 
 class AsmExpr(AsmNode):
     def __init__(self, datatype: DataType):
@@ -44,22 +52,37 @@ class AsmInt(AsmExpr):
     def __init__(self, val: int):
         super().__init__(DataType.INT)
         self.value = val
+    def __pretty_print__(self, printer: Printer):
+        printer.append(str(self.value))
 class AsmString(AsmExpr):
     def __init__(self, val: str):
         super().__init__(DataType.STRING)
         self.value = val
+    def __pretty_print__(self, printer: Printer):
+        printer.append(f'"{self.value}"')
 
 class AsmBlock(AsmExpr):
     def __init__(self, name: str, contents: list[AsmNode]):
         super().__init__(DataType.UNKNOWN if len(contents) < 1 else contents[-1].data_type())
         self.label = name
         self.contents = contents
+    def __pretty_print__(self, printer: Printer):
+        printer.append_ln(f'{self.label}:')
+        printer.right()
+        for child in self.contents:
+            printer.print(child)
+        printer.left()
 
 class AsmCall(AsmExpr):
     def __init__(self, name: str, datatype: DataType, operands: list[AsmExpr]):
         super().__init__(datatype)
         self.target = name
         self.operands = operands
+    def __pretty_print__(self, printer: Printer):
+        printer.append(f'Call {self.target} (')
+        for op in self.operands:
+            printer.print(op)
+        printer.append_ln(')')
 
 class AsmModule:
     def __init__(self):
@@ -71,3 +94,9 @@ class AsmModule:
         return None
     def add_block(self, block: AsmBlock, define: CallDefinition):
         self.text.append((block, define))
+    def __pretty_print__(self, printer: Printer):
+        printer.append_ln(str(self.data))
+        print(self.text)
+        for block in self.text:
+            print(block)
+            printer.print(block[0])
