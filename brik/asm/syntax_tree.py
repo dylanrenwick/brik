@@ -33,14 +33,14 @@ class AsmNode(ABC):
         pass
 
 class AsmLiteral(AsmNode):
-    def __init__(self, value: str):
-        self.value = value
+    def __init__(self, asm: str):
+        self.asm = asm
     def data_type(self)-> DataType:
         return super().data_type()
     def __pretty_print__(self, printer: Printer):
         printer.append_ln('#asm:')
         printer.right()
-        printer.append_ln(self.value)
+        printer.append_ln(self.asm)
         printer.left()
 
 class AsmExpr(AsmNode):
