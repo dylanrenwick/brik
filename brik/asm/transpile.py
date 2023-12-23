@@ -51,6 +51,8 @@ class Transpiler(Debug):
     def transpile_node(self, node: Node)-> AsmNode | None:
         if isinstance(node, CallNode): return self.transpile_call(node)
         elif isinstance(node, AsmMacroNode): return self.transpile_asm(node)
+        elif isinstance(node, NumberNode): return self.transpile_number(node)
+        elif isinstance(node, StringNode): return self.transpile_string(node)
         elif isinstance(node, ReferenceNode): return None
         else: raise Exception(f'Could not transpile node of type {type(node)}')
 
