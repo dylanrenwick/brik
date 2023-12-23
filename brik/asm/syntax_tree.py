@@ -89,7 +89,7 @@ class AsmCall(AsmExpr):
 class AsmModule:
     def __init__(self):
         self.data = DataSection()
-        self.text = []
+        self.text: list[Tuple[AsmBlock, CallDefinition]] = []
     def get_block(self, label: str)-> Tuple[AsmBlock, CallDefinition] | None:
         for block in self.text:
             if block[0].label == label: return block
