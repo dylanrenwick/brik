@@ -98,7 +98,6 @@ class AsmModule:
         self.text.append((block, define))
     def __pretty_print__(self, printer: Printer):
         printer.append_ln(str(self.data))
-        printer.append_ln()
         for block in self.text:
             printer.append(block[0].label)
             if block[1].pattern is not None and len(block[1].pattern.args) > 0:
