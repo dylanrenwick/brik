@@ -15,17 +15,19 @@ class Transpiler(Debug):
         self.asm_mod.add_block(self.transpile_block('main', module.entry_point), CallDefinition('main', module.entry_point))
         return self.asm_mod
 
-    def transpile_node(self, node: Node)-> AsmNode:
+    def transpile_node(self, node: Node)-> AsmNode | None:
         if isinstance(node, CallNode): return self.transpile_call(node)
         elif isinstance(node, AsmMacroNode): return self.transpile_asm(node)
+        elif isinstance(node, ReferenceNode): return None
         else: raise Exception(f'Could not transpile node of type {type(node)}')
 
     def transpile_define(self, define: CallDefinition)-> AsmBlock:
         return self.transpile_block(define.name, define.body)
     def transpile_block(self, label: str, block: BlockNode)-> AsmBlock:
+        nodes = [self.transpile_node(node) for node in block.contents]
         return AsmBlock(
             label,
-            [self.transpile_node(node) for node in block.contents]
+            [node for node in nodes if node is not None]
         )
 
     def transpile_expr(self, node: Node)-> AsmExpr:
