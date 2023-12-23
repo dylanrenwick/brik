@@ -100,13 +100,13 @@ class Transpiler(Debug):
                     self.v_print(f'Handling register ref from "{line}"')
                     idnt = match.expand('\\1')
                     self.v_print(f'Matched on {idnt}')
-                    reg = self.platform.get_register(idnt)
+                    reg = self.platform.register(idnt)
                     if reg is None:
                         raise Exception(f'Could not get register from name {idnt} in {node.asm}')
                     line = f'{line[:match.start()]}{reg}{line[match.end():]}'
             if matches := Transpiler._asm_re_reference.finditer(line):
                 for match in matches:
-                    offset = self.stack_frame[match.expand('\\1')] * self.platform.get_word_size()
+                    offset = self.stack_frame[match.expand('\\1')] * self.platform.word_size()
                     sign = '-' if offset < 0 else '+'
                     line = f'{line[:match.start()]}[{self.platform.bp}{sign}{abs(offset)}]{line[match.end():]}'
             if len(asm) > 0: asm += '\n'

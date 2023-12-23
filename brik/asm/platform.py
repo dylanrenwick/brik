@@ -27,13 +27,13 @@ class CompilerPlatform(Enum):
 
 class Platform(ABC):
     @abstractmethod
-    def get_word_size(self)-> int:
+    def word_size(self)-> int:
         pass
     @abstractmethod
-    def get_reg_prefix(self)-> str:
+    def reg_prefix(self)-> str:
         pass
     @abstractmethod
-    def get_assembler_format(self)-> str:
+    def assembler_format(self)-> str:
         pass
 
     @abstractmethod
@@ -47,12 +47,12 @@ class Platform(ABC):
     _registers = ['ax','bx','cx','dx','sp','bp','si','di']
     def __getattribute__(self, name: str):
         if len(name) == 2 and name in Platform._registers:
-            val = self.get_register(name)
+            val = self.register(name)
             if val: return val
         return super().__getattribute__(name)
-    def get_register(self, name: str):
+    def register(self, name: str):
         if len(name) == 2 and name.lower() in Platform._registers:
-            return f'{self.get_reg_prefix()}{name.lower()}'
+            return f'{self.reg_prefix()}{name.lower()}'
         else: return None
 
     def make_stack_frame(self, printer: Printer):
@@ -78,11 +78,11 @@ class PlatformLinux(Platform):
     pass
 
 class PlatformLinux32(PlatformLinux):
-    def get_word_size(self)-> int:
+    def word_size(self)-> int:
         return 4
-    def get_reg_prefix(self)-> str:
+    def reg_prefix(self)-> str:
         return 'e'
-    def get_assembler_format(self)-> str:
+    def assembler_format(self)-> str:
         return 'elf32'
 
     def make_syscall(self, printer: Printer, syscall: Syscall, *data):
@@ -93,11 +93,11 @@ class PlatformLinux32(PlatformLinux):
         printer.append_ln('int 0x80')
 
 class PlatformLinux64(PlatformLinux):
-    def get_word_size(self)-> int:
+    def word_size(self)-> int:
         return 8
-    def get_reg_prefix(self)-> str:
+    def reg_prefix(self)-> str:
         return 'r'
-    def get_assembler_format(self)-> str:
+    def assembler_format(self)-> str:
         return 'elf64'
 
     def make_syscall(self, printer: Printer, syscall: Syscall, *data):
@@ -111,11 +111,11 @@ class PlatformWin(Platform):
     pass
 
 class PlatformWin32(PlatformWin):
-    def get_word_size(self)-> int:
+    def word_size(self)-> int:
         return 4
-    def get_reg_prefix(self)-> str:
+    def reg_prefix(self)-> str:
         return 'e'
-    def get_assembler_format(self)-> str:
+    def assembler_format(self)-> str:
         return 'win32'
 
     def make_syscall(self, printer: Printer, syscall: Syscall, *data):
@@ -126,11 +126,11 @@ class PlatformWin32(PlatformWin):
         printer.append_ln('int 0x80')
 
 class PlatformWin64(PlatformWin):
-    def get_word_size(self)-> int:
+    def word_size(self)-> int:
         return 8
-    def get_reg_prefix(self)-> str:
+    def reg_prefix(self)-> str:
         return 'r'
-    def get_assembler_format(self)-> str:
+    def assembler_format(self)-> str:
         return 'win64'
 
     def make_syscall(self, printer: Printer, syscall: Syscall, *data):
