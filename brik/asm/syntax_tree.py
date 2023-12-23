@@ -12,7 +12,7 @@ class DataSection:
         pass
     def __str__(self)-> str:
         p = Printer('  ')
-        p.append_ln('SECTION .text')
+        p.append_ln('section .data')
         for name in self.data:
             p.append_ln(f'{name}:\tdb "{self.data[name]}",10')
         return str(p)
