@@ -1,3 +1,5 @@
+import re
+
 class Printer:
     def __init__(self, indent_style='\t'):
         self.clear()
@@ -14,19 +16,21 @@ class Printer:
     def left(self):
         self.indent -= 1
 
+    def _append(self, msg: str):
+        if msg == '\n': self.content += msg
+        elif Printer._whitespace_regex.match(msg) is not None and (len(self.content) == 0 or self.content[-1] == '\n'):
+            return
+        elif len(self.content) > 0 and self.content[-1] != '\n': self.content += msg
+        else: self.content += f'{self.get_indent()}{msg}'
+
+    _whitespace_regex = re.compile('^[ \t\r\n]*$')
     def append(self, msg: str = ''):
         lines = msg.split('\n')
-        if len(lines) == 0: return
-        indented_lines = [f'{self.get_indent()}{line}' for line in lines if len(line.strip()) > 0]
-        if len(indented_lines) > 0 and len(self.content) > 0 and self.content[-1] != '\n':
-            indented_lines[0] = lines[0]
-        if msg[-1] == '\n':
-            if len(indented_lines) > 0:
-                indented_lines[-1] += '\n'
-            else:
-                indented_lines.append('\n')
-        new_content = '\n'.join(indented_lines)
-        self.content += new_content
+        line_count = len(lines)
+        if line_count == 0: return
+        for i in range(0, line_count):
+            msg = f'{lines[i]}\n' if i < line_count - 1 else lines[i]
+            self._append(msg)
 
     def append_ln(self, msg: str = ''):
         self.append(f'{msg}\n')
