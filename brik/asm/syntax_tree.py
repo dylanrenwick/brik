@@ -80,8 +80,10 @@ class AsmCall(AsmExpr):
         self.operands = operands
     def __pretty_print__(self, printer: Printer):
         printer.append(f'Call {self.target} (')
-        for op in self.operands:
-            printer.print(op)
+        for i in range(0, len(self.operands)):
+            printer.print(self.operands[i])
+            if i < len(self.operands) - 1:
+                printer.append(' ')
         printer.append_ln(')')
 
 class AsmModule:
