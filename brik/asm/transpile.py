@@ -12,7 +12,7 @@ class Transpiler(Debug):
         self.asm_mod = AsmModule()
         for define in [d for d in module.defines if isinstance(d, CallDefinition)]:
             self.asm_mod.add_block(self.transpile_define(define), define)
-        self.asm_mod.text.append(self.transpile_block('main', module.entry_point))
+        self.asm_mod.add_block(self.transpile_block('main', module.entry_point), CallDefinition('main', module.entry_point))
         return self.asm_mod
 
     def transpile_node(self, node: Node)-> AsmNode:
