@@ -16,12 +16,16 @@ class Printer:
 
     def append(self, msg: str = ''):
         lines = msg.split('\n')
-        indented_lines = [f'{self.get_indent()}{line}' for line in lines if len(line.strip())]
-        if len(indented_lines) and len(self.content) and self.content[-1] != '\n':
-            indented_lines[0] = indented_lines[0].lstrip()
-        new_content = '\n'.join([f'{self.get_indent()}{line}' for line in lines if len(line.strip())])
+        if len(lines) == 0: return
+        indented_lines = [f'{self.get_indent()}{line}' for line in lines if len(line.strip()) > 0]
+        if len(indented_lines) > 0 and len(self.content) > 0 and self.content[-1] != '\n':
+            indented_lines[0] = lines[0]
         if msg[-1] == '\n':
-            new_content += '\n'
+            if len(indented_lines) > 0:
+                indented_lines[-1] += '\n'
+            else:
+                indented_lines.append('\n')
+        new_content = '\n'.join(indented_lines)
         self.content += new_content
 
     def append_ln(self, msg: str = ''):
