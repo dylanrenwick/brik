@@ -191,4 +191,10 @@ class Parser(Debug):
 
         contents = self.expect(TokenType.STRING, f'#asm builtin must take a string')
         self.expect(TokenType.RIGHT_BRACKET, 'Could not find closing bracket for call')
-        return AsmMacroNode(contents.value)
+
+        asm: str = contents.value
+        asm_lines = asm.split('\n')
+        asm_lines = [line.strip() for line in asm_lines]
+        asm = '\n'.join(asm_lines)
+
+        return AsmMacroNode(asm)
