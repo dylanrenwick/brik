@@ -26,6 +26,7 @@ def main():
         proj_name = args.file.split('\\')[-1].split('.')[0]
         with open(args.file, 'r') as f:
             source = f.read()
+            source = source.replace('\r\n', '\n')
         print(f'Compiling project {proj_name}')
         opts = BrikOpts(
             proj_name,
